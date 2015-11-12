@@ -130,93 +130,96 @@ class Command(BaseCommand):
 
 #('d2l', 'dota2lounge'), ('d2byd', 'vpgame dota'), ('vpp', 'vpgame p coins'), ('d2byd', 'dota 2 bestyolo dota'), ('d2byc', 'dota 2 bestyolo csgo')
 
-        not_completed=True
 
-        while(not_completed):
+
+        active_match=Match.objects.filter(is_active=True).prefetch_related('links_set')
+        d2l_links=Links.objects.filter(match__in=active_match,linktype='d2l')
+        for link in d2l_links:
+            result=d2l_parser(link.link)
+            link.team1odd=result[0]
+            link.team2odd=result[1]
+            link.time_left=result[2].encode("utf-8")
+            link.save()
+            msg1=str(link.match.pk)+str('.teama.d2l,')+str(result[0])
+            msg2=str(link.match.pk)+str('.teamb.d2l,')+str(result[1])
+            msg3=str(link.match.pk)+str('.time.d2l,')+str(result[2])
+            r.publish("b2c", msg1)
+            r.publish("b2c", msg2)
+            r.publish("b2c", msg3)
+            
+
+
+
+        vpd_links=Links.objects.filter(match__in=active_match,linktype='vpd')
+        for link in vpd_links:
+            result=vpg_parser(link.link)
+            link.team1odd=result[0]
+            link.team2odd=result[1]
+            link.time_left=result[4].encode("utf-8")
+            link.save()
+
+            msg1=str(link.match.pk)+str('.teama.vpd,')+str(result[0])
+            msg2=str(link.match.pk)+str('.teamb.vpd,')+str(result[1])
+            msg3=str(link.match.pk)+str('.time.vpd,')+str(result[4])
+            r.publish("b2c", msg1)
+            r.publish("b2c", msg2)
+            r.publish("b2c", msg3)
+
+
+        vpp_links=Links.objects.filter(match__in=active_match,linktype='vpp')
+        for link in vpp_links:
+            result=vpg_parser(link.link)
+            link.team1odd=result[2]
+            link.team2odd=result[3]
+            link.time_left=result[4].encode("utf-8")
+            link.save()
+            msg1=str(link.match.pk)+str('.teama.vpp,')+str(result[2])
+            msg2=str(link.match.pk)+str('.teamb.vpp,')+str(result[3])
+            msg3=str(link.match.pk)+str('.time.vpp,')+str(result[4])
+            r.publish("b2c", msg1)
+            r.publish("b2c", msg2)
+            r.publish("b2c", msg3)
+
+
+
+        d2byd_links=Links.objects.filter(match__in=active_match,linktype='d2byd')
+        for link in d2byd_links:
+            result=d2b_parser(link.link)
+            link.team1odd=result[0]
+            link.team2odd=result[1]
             try:
-                active_match=Match.objects.filter(is_active=True).prefetch_related('links_set')
-                d2l_links=Links.objects.filter(match__in=active_match,linktype='d2l')
-                for link in d2l_links:
-                    result=d2l_parser(link.link)
-                    link.team1odd=result[0]
-                    link.team2odd=result[1]
-                    link.time_left=result[2].encode("utf-8")
-                    link.save()
-                    msg1=str(link.match.pk)+str('.teama.d2l,')+str(result[0])
-                    msg2=str(link.match.pk)+str('.teamb.d2l,')+str(result[1])
-                    msg3=str(link.match.pk)+str('.time.d2l,')+str(result[2])
-                    r.publish("b2c", msg1)
-                    r.publish("b2c", msg2)
-                    r.publish("b2c", msg3)
-                    
-
-
-
-                vpd_links=Links.objects.filter(match__in=active_match,linktype='vpd')
-                for link in vpd_links:
-                    result=vpg_parser(link.link)
-                    link.team1odd=result[0]
-                    link.team2odd=result[1]
-                    link.time_left=result[4].encode("utf-8")
-                    link.save()
-
-                    msg1=str(link.match.pk)+str('.teama.vpd,')+str(result[0])
-                    msg2=str(link.match.pk)+str('.teamb.vpd,')+str(result[1])
-                    msg3=str(link.match.pk)+str('.time.vpd,')+str(result[4])
-                    r.publish("b2c", msg1)
-                    r.publish("b2c", msg2)
-                    r.publish("b2c", msg3)
-
-
-                vpp_links=Links.objects.filter(match__in=active_match,linktype='vpp')
-                for link in vpp_links:
-                    result=vpg_parser(link.link)
-                    link.team1odd=result[2]
-                    link.team2odd=result[3]
-                    link.time_left=result[4].encode("utf-8")
-                    link.save()
-                    msg1=str(link.match.pk)+str('.teama.vpp,')+str(result[2])
-                    msg2=str(link.match.pk)+str('.teamb.vpp,')+str(result[3])
-                    msg3=str(link.match.pk)+str('.time.vpp,')+str(result[4])
-                    r.publish("b2c", msg1)
-                    r.publish("b2c", msg2)
-                    r.publish("b2c", msg3)
-
-
-
-                d2byd_links=Links.objects.filter(match__in=active_match,linktype='d2byd')
-                for link in d2byd_links:
-                    result=d2b_parser(link.link)
-                    link.team1odd=result[0]
-                    link.team2odd=result[1]
-                    link.time_left=result[4].encode("utf-8")
-                    link.save()
-
-                    msg1=str(link.match.pk)+str('.teama.d2byd,')+str(result[0])
-                    msg2=str(link.match.pk)+str('.teamb.d2byd,')+str(result[1])
-                    msg3=str(link.match.pk)+str('.time.d2byd,')+str(result[4].encode("utf-8"))
-                    r.publish("b2c", msg1)
-                    r.publish("b2c", msg2)
-                    r.publish("b2c", msg3)
-
-
-
-                d2byc_links=Links.objects.filter(match__in=active_match,linktype='d2byc')
-                for link in d2byc_links:
-                    result=d2b_parser(link.link)
-                    link.team1odd=result[2]
-                    link.team2odd=result[3]
-                    link.time_left=result[4].encode("utf-8")
-                    link.save()
-
-                    msg1=str(link.match.pk)+str('.teama.d2byc,')+str(result[2])
-                    msg2=str(link.match.pk)+str('.teamb.d2byc,')+str(result[3])
-                    msg3=str(link.match.pk)+str('.time.d2byc,')+str(result[4].encode("utf-8"))
-
-                    r.publish("b2c", msg1)
-                    r.publish("b2c", msg2)
-                    r.publish("b2c", msg3)
-
-                not_completed=False
+                link.time_left=result[4].encode("utf-8")
             except:
-                pass
+                link.time_left='live'
+                result[4]='live'
+            link.save()
+
+            msg1=str(link.match.pk)+str('.teama.d2byd,')+str(result[0])
+            msg2=str(link.match.pk)+str('.teamb.d2byd,')+str(result[1])
+            msg3=str(link.match.pk)+str('.time.d2byd,')+str(result[4].encode("utf-8"))
+            r.publish("b2c", msg1)
+            r.publish("b2c", msg2)
+            r.publish("b2c", msg3)
+
+
+
+        d2byc_links=Links.objects.filter(match__in=active_match,linktype='d2byc')
+        for link in d2byc_links:
+            result=d2b_parser(link.link)
+            link.team1odd=result[2]
+            link.team2odd=result[3]
+            try:
+                link.time_left=result[4].encode("utf-8")
+            except:
+                link.time_left='live'
+                result[4]='live'
+            link.save()
+
+            msg1=str(link.match.pk)+str('.teama.d2byc,')+str(result[2])
+            msg2=str(link.match.pk)+str('.teamb.d2byc,')+str(result[3])
+            msg3=str(link.match.pk)+str('.time.d2byc,')+str(result[4].encode("utf-8"))
+
+            r.publish("b2c", msg1)
+            r.publish("b2c", msg2)
+            r.publish("b2c", msg3)
+
