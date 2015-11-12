@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+
+
+
+
+
+<table><tr>
+<th>
+Site_name
+
+</th>
+
+
+
+<th>
+<a href="http://dota2lounge.com/match?m=9871" target="_blank">dota2lounge </a>
+</th>
+
+
+<th>
+<a href="http://dota2bestyolo.com/match/12039" target="_blank">dota 2 bestyolo dota </a>
+</th>
+
+
+<th>
+<a href="http://dota2bestyolo.com/match/12039" target="_blank">dota 2 bestyolo csgo </a>
+</th>
+
+
+<th>
+<a href="http://dota2.vpgame.com/guess-match-112491.html" target="_blank">vpgame p coins </a>
+</th>
+
+
+<th>
+<a href="http://dota2.vpgame.com/guess-match-112491.html" target="_blank">vpgame dota </a>
+</th>
+
+</tr>
+
+<tr>
+<th>
+Team 1 odds
+</th>
+
+
+<td class="1 teama d2l">
+2.06978655525
+</td>
+
+
+
+<td class="1 teama d2byd">
+1.57507855795
+</td>
+
+
+
+<td class="1 teama d2byc">
+4.12007619725
+</td>
+
+
+
+<td class="1 teama vpp">
+1.66
+</td>
+
+
+
+<td class="1.teama.v	pd">
+1.95
+</td>
+
+
+</tr>
+
+<tr>
+<th>
+Team 2 odds
+</th>
+
+<td class="1 teamb">
+0.483141605816
+</td>
+
+<td class="1 teamb">
+0.634888967889
+</td>
+
+<td class="1 teamb">
+0.242713957734
+</td>
+
+<td class="1 teamb">
+0.54
+</td>
+
+<td class="1 teamb">
+0.46
+</td>
+
+</tr>
+
+<tr>
+<th>
+time left
+</th>
+
+
+<td>
+3 hours from now
+</td>
+
+
+<td>
+3&nbsp;hrs from now            	
+</td>
+
+
+<td>
+3&nbsp;hrs from now            	
+</td>
+
+
+<td>
+3 h later
+</td>
+
+
+<td>
+3 h later
+</td>
+
+</tr>
+
+
+  </table>
+
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io().listen(3000);
+      $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg){
+      	var partsOfStr = msg.split(',');
+      	console.log(partsOfStr[0])
+      	x=document.getElementsByClassName(partsOfStr[0]);  // Find the elements
+    for(var i = 0; i < x.length; i++){
+    x[i].innerText=partsOfStr[1];    // Change the content
+    }
+        $('#messages').append($('<li>').text(msg));
+      });
+    </script>
+  </body>
+</html>
