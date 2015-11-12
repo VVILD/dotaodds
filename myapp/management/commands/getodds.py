@@ -145,9 +145,9 @@ class Command(BaseCommand):
                     msg1=str(link.match.pk)+str('.teama.d2l,')+str(result[0])
                     msg2=str(link.match.pk)+str('.teamb.d2l,')+str(result[1])
                     msg3=str(link.match.pk)+str('.time.d2l,')+str(result[2])
-                    r.publish("b2c", "msg1")
-                    r.publish("b2c", "msg2")
-                    r.publish("b2c", "msg3")
+                    r.publish("b2c", msg1)
+                    r.publish("b2c", msg2)
+                    r.publish("b2c", msg3)
                     
 
 
@@ -163,9 +163,9 @@ class Command(BaseCommand):
                     msg1=str(link.match.pk)+str('.teama.vpd,')+str(result[0])
                     msg2=str(link.match.pk)+str('.teamb.vpd,')+str(result[1])
                     msg3=str(link.match.pk)+str('.time.vpd,')+str(result[4])
-                    r.publish("b2c", "msg1")
-                    r.publish("b2c", "msg2")
-                    r.publish("b2c", "msg3")
+                    r.publish("b2c", msg1)
+                    r.publish("b2c", msg2)
+                    r.publish("b2c", msg3)
 
 
                 vpp_links=Links.objects.filter(match__in=active_match,linktype='vpp')
@@ -178,9 +178,9 @@ class Command(BaseCommand):
                     msg1=str(link.match.pk)+str('.teama.vpp,')+str(result[2])
                     msg2=str(link.match.pk)+str('.teamb.vpp,')+str(result[3])
                     msg3=str(link.match.pk)+str('.time.vpp,')+str(result[4])
-                    r.publish("b2c", "msg1")
-                    r.publish("b2c", "msg2")
-                    r.publish("b2c", "msg3")
+                    r.publish("b2c", msg1)
+                    r.publish("b2c", msg2)
+                    r.publish("b2c", msg3)
 
 
 
@@ -195,9 +195,9 @@ class Command(BaseCommand):
                     msg1=str(link.match.pk)+str('.teama.d2byd,')+str(result[0])
                     msg2=str(link.match.pk)+str('.teamb.d2byd,')+str(result[1])
                     msg3=str(link.match.pk)+str('.time.d2byd,')+str(result[4].encode("utf-8"))
-                    r.publish("b2c", "msg1")
-                    r.publish("b2c", "msg2")
-                    r.publish("b2c", "msg3")
+                    r.publish("b2c", msg1)
+                    r.publish("b2c", msg2)
+                    r.publish("b2c", msg3)
 
 
 
@@ -213,9 +213,9 @@ class Command(BaseCommand):
                     msg2=str(link.match.pk)+str('.teamb.d2byc,')+str(result[3])
                     msg3=str(link.match.pk)+str('.time.d2byc,')+str(result[4].encode("utf-8"))
 
-                    r.publish("b2c", "msg1")
-                    r.publish("b2c", "msg2")
-                    r.publish("b2c", "msg3")
+                    r.publish("b2c", msg1)
+                    r.publish("b2c", msg2)
+                    r.publish("b2c", msg3)
 
                 not_completed=False
             except:
