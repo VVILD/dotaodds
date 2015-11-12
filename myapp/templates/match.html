@@ -1,0 +1,155 @@
+<center><h1>Active matches</h1></center> <br>
+
+
+
+<html>
+<head>
+
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script> 
+
+
+
+<script>
+
+var elements = document.getElementsByClassName("class-1");
+for (var i = 0, len = elements.length; i < len; i++) {
+    // elements[i].style ...
+}
+
+</script>
+<script>
+
+
+function createtable(a) {
+    console.log(a)
+
+    var matchid=String(a);
+    console.log(matchid)
+
+    var elements = document.getElementsByClassName(matchid.concat(" teama"));
+
+    console.log(elements)
+
+    // for (var j = 0; j < col1.length; j++) {  
+    //     if (j % 2 == 0) {
+    //         document.write("<tr><td>" + col1[j] + " </td>");
+    //         document.write("<td>" + col2[j] + "</td></tr>");
+    //     } else {
+    //         document.write("<tr  bgcolor='#aeb2bf'><td>" + col1[j] + " </td>");
+    //         document.write("<td>" + col2[j] + "</td></tr1>");
+    //     }
+    // }
+}
+</script>
+</head>
+<body>
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+.highest{
+    background-color:Red;
+}
+
+
+
+.lowest{
+    background-color:Yellow;
+}
+
+
+
+</style>
+
+{% for row in match %}
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><b>{{ row.name }}</b></div>
+  <div class="panel-body">
+    <p>
+        <script>
+          createtable({{ row.pk }});
+        </script>
+
+    </p>
+  </div>
+
+  <!-- Table -->
+  <table class="table" id="mytable">
+
+
+
+<tr>
+<th>
+Site_name
+
+</th>
+
+{% for link in row.links_set.all %}
+
+<th>
+<a href="{{ link.link }}" target="_blank">{{ link.get_linktype_display }} </a>
+</th>
+{% endfor %}
+</tr>
+
+<tr>
+<th>
+Team 1 odds
+</th>
+{% for link in row.links_set.all %}
+
+<td class="{{ row.pk }} teama {{ link.linktype }}">
+{{ link.team1odd }}
+</td>
+
+{% endfor %}
+</tr>
+
+<tr>
+<th>
+Team 2 odds
+</th>
+{% for link in row.links_set.all %}
+<td class="{{ row.pk }} teamb">
+{{ link.team2odd }}
+</td>
+{% endfor %}
+</tr>
+
+<tr>
+<th>
+time left
+</th>
+{% for link in row.links_set.all %}
+
+<td>
+{{ link.time_left }}
+</td>
+{% endfor %}
+</tr>
+
+
+  </table>
+</div>
+
+{% endfor %}
+
+
+
+
+</body>
