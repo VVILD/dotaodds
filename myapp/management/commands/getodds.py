@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
         def d2l_parser(url):
             
-            soup = BeautifulSoup(urllib2.urlopen(url).read(),"lxml")     
+            soup = BeautifulSoup(urllib2.urlopen(url).read(),"xml")     
             data  = soup.find_all("script")
             count=0
             z=data[4].string
@@ -45,7 +45,7 @@ class Command(BaseCommand):
 
         def vpg_parser(url):
             
-            soup = BeautifulSoup(urllib2.urlopen(url).read(),"lxml")     
+            soup = BeautifulSoup(urllib2.urlopen(url).read(),"xml")     
             data  = soup.find_all("span", class_="vp-item-odds")
             vp_list=[]
 
@@ -76,7 +76,7 @@ class Command(BaseCommand):
 
         def d2b_parser(url):
             
-            soup = BeautifulSoup(urllib2.urlopen(url).read(),"lxml")     
+            soup = BeautifulSoup(urllib2.urlopen(url).read(),"xml")     
             data  = soup.find_all("script")
             count=0
             z=data[10].string
