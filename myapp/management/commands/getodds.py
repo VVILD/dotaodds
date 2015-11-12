@@ -124,7 +124,7 @@ class Command(BaseCommand):
             result=d2l_parser(link.link)
             link.team1odd=result[0]
             link.team2odd=result[1]
-            link.time_left=result[2]
+            link.time_left=result[2].encode("utf-8")
             link.save()
 
         vpd_links=Links.objects.filter(match__in=active_match,linktype='vpd')
@@ -132,7 +132,7 @@ class Command(BaseCommand):
             result=vpg_parser(link.link)
             link.team1odd=result[0]
             link.team2odd=result[1]
-            link.time_left=result[4]
+            link.time_left=result[4].encode("utf-8")
             link.save()
 
         vpp_links=Links.objects.filter(match__in=active_match,linktype='vpp')
@@ -140,7 +140,7 @@ class Command(BaseCommand):
             result=vpg_parser(link.link)
             link.team1odd=result[2]
             link.team2odd=result[3]
-            link.time_left=result[4]
+            link.time_left=result[4].encode("utf-8")
             link.save()
 
         d2byd_links=Links.objects.filter(match__in=active_match,linktype='d2byd')
@@ -148,7 +148,7 @@ class Command(BaseCommand):
             result=d2b_parser(link.link)
             link.team1odd=result[0]
             link.team2odd=result[1]
-            link.time_left=result[4]
+            link.time_left=result[4].encode("utf-8")
             link.save()
 
         d2byc_links=Links.objects.filter(match__in=active_match,linktype='d2byc')
@@ -156,5 +156,5 @@ class Command(BaseCommand):
             result=d2b_parser(link.link)
             link.team1odd=result[2]
             link.team2odd=result[3]
-            link.time_left=result[4]
+            link.time_left=result[4].encode("utf-8")
             link.save()
