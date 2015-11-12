@@ -49,6 +49,21 @@ function createtable(a) {
     // }
 }
 </script>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+var socket = io.connect('http://127.0.0.1:3000');
+
+      socket.on('chat message', function(msg){
+        var partsOfStr = msg.split(',');
+        console.log(partsOfStr[0])
+        x=document.getElementsByClassName(partsOfStr[0]);  // Find the elements
+    for(var i = 0; i < x.length; i++){
+    x[i].innerText=partsOfStr[1];    // Change the content
+    }
+      });
+    </script>
 </head>
 <body>
 <style>
@@ -75,7 +90,6 @@ th, td {
 </style>
 
 {% for row in match %}
-
 <div class="panel panel-default">
   <!-- Default panel contents -->
   <div class="panel-heading"><b>{{ row.name }}</b></div>
@@ -113,7 +127,7 @@ Team 1 odds
 </th>
 {% for link in row.links_set.all %}
 
-<td class="{{ row.pk }} teama {{ link.linktype }}">
+<td class="{{ row.pk }}.teama.{{ link.linktype }}">
 {{ link.team1odd }}
 </td>
 
@@ -125,7 +139,7 @@ Team 1 odds
 Team 2 odds
 </th>
 {% for link in row.links_set.all %}
-<td class="{{ row.pk }} teamb">
+<td class="{{ row.pk }}.teamb.{{ link.linktype }}">
 {{ link.team2odd }}
 </td>
 {% endfor %}
@@ -137,7 +151,7 @@ time left
 </th>
 {% for link in row.links_set.all %}
 
-<td>
+<td class="{{ row.pk }}.time.{{ link.linktype }}">
 {{ link.time_left }}
 </td>
 {% endfor %}
