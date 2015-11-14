@@ -61,6 +61,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         'NAME':'dotaodds',
         'USER':'root',
         'PASSWORD':'followshyp',
