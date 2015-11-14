@@ -35,6 +35,65 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
+
+        def nxt_parser(url):
+            
+            soup = BeautifulSoup(urllib2.urlopen(url).read(),"html.parser")     
+            
+            data  = soup.find_all("span", class_="potential_reward")
+
+            data1  = soup.find_all("span", class_="potential_reward1")
+
+            # z=data[4].string
+            # split=z.split(';')
+            teama=float(data[0].string)
+            teamb=float(data1[0].string)
+
+            # print "d2l odds"
+            # print teama/teamb
+            # print teamb/teama
+
+            d2l_max=max([teamb,teama])
+            d2l_min=min([teamb,teama])
+
+            # data  = soup.find_all("div", class_="half")
+
+            return [d2l_max,d2l_min,""]
+
+    # print "d2l time"  
+    # print data[0].string
+
+#d2t_parser(d2t_url)
+
+
+        def d2t_parser(url):
+            
+            soup = BeautifulSoup(urllib2.urlopen(url).read(),"html.parser")     
+            
+            data  = soup.find_all("div", class_=None)
+
+
+            a=data[3].string
+            b=data[5].string
+
+            c="".join(a.split())
+            d="".join(b.split())
+
+            teama=float(c[2:])
+            teamb=float(d[2:])
+
+
+
+            data  = soup.find_all("span", class_=None)
+
+            time=data[0].string
+            
+
+            d2l_max=max([teamb,teama])
+            d2l_min=min([teamb,teama])
+
+            return [d2l_max,d2l_min,time]
+
         def d2l_parser(url):
             
             soup = BeautifulSoup(urllib2.urlopen(url).read(), 'html.parser')     
@@ -223,3 +282,35 @@ class Command(BaseCommand):
             r.publish("b2c", msg2)
             r.publish("b2c", msg3)
 
+        d2t_links=Links.objects.filter(match__in=active_match,linktype='d2t')
+        for link in d2t_links:
+            result=d2t_parser(link.link)
+            link.team1odd=result[0]
+            link.team2odd=result[1]
+            try:
+                link.time_left=result[2].encode("utf-8")
+            except:
+                link.time_left='live'
+                result[4]='live'
+            link.save()
+
+            # msg1=str(link.match.pk)+str('.teama.d2byc,')+str(result[2])
+            # msg2=str(link.match.pk)+str('.teamb.d2byc,')+str(result[3])
+            # msg3=str(link.match.pk)+str('.time.d2byc,')+str(result[4].encode("utf-8"))
+
+            # r.publish("b2c", msg1)
+            # r.publish("b2c", msg2)
+            # r.publish("b2c", msg3)
+
+
+        nxt_links=Links.objects.filter(match__in=active_match,linktype='nxt')
+        for link in nxt_links:
+            result=nxt_parser(link.link)
+            link.team1odd=result[0]
+            link.team2odd=result[1]
+            try:
+                link.time_left=result[2].encode("utf-8")
+            except:
+                link.time_left='live'
+                result[4]='live'
+            link.save()
