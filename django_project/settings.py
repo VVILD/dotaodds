@@ -65,7 +65,7 @@ DATABASES = {
         'PORT': '3306',
         'NAME':'dotaodds',
         'USER':'root',
-        'PASSWORD':'followshyp',
+        'PASSWORD':'',
     }
 }
 

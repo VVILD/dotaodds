@@ -127,9 +127,17 @@ Team 1 odds
 </th>
 {% for link in row.links_set.all %}
 
-<td class="{{ row.pk }}.teama.{{ link.linktype }}">
-{{ link.team1odd }}
+{% if link.reverse %}
+<td class="{{ row.pk }}.teamb.{{ link.linktype }}">
+{{ link.team2odd }}
 </td>
+
+{% else %}
+
+
+{% endif %}
+
+
 
 {% endfor %}
 </tr>
@@ -139,9 +147,21 @@ Team 1 odds
 Team 2 odds
 </th>
 {% for link in row.links_set.all %}
+
+{% if link.reverse %}
+<td class="{{ row.pk }}.teama.{{ link.linktype }}">
+{{ link.team1odd }}
+</td>
+
+{% else %}
+
 <td class="{{ row.pk }}.teamb.{{ link.linktype }}">
 {{ link.team2odd }}
 </td>
+
+{% endif %}
+
+
 {% endfor %}
 </tr>
 

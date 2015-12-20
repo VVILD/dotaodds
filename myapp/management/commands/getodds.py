@@ -14,17 +14,8 @@ from bs4 import BeautifulSoup
 import urllib2
 import json
 import re
+from concurrent import futures
 
-
-import redis
-
-config = {
-    'host': 'localhost',
-    'port': 6379,
-    'db': 0,
-}
-
-r = redis.StrictRedis(**config)
 
 
 # linktype = models.CharField(max_length=10, choices=(,),null=True, blank=True)
@@ -192,57 +183,60 @@ class Command(BaseCommand):
 
 
         active_match=Match.objects.filter(is_active=True).prefetch_related('links_set')
-        d2l_links=Links.objects.filter(match__in=active_match,linktype='d2l')
-        for link in d2l_links:
+        # d2l_links=Links.objects.filter(match__in=active_match,linktype='d2l')
+        def fun_d2l(link):
+        # for link in d2l_links:
             result=d2l_parser(link.link)
             link.team1odd=result[0]
             link.team2odd=result[1]
             link.time_left=result[2].encode("utf-8")
             link.save()
-            msg1=str(link.match.pk)+str('.teama.d2l,')+str(result[0])
-            msg2=str(link.match.pk)+str('.teamb.d2l,')+str(result[1])
-            msg3=str(link.match.pk)+str('.time.d2l,')+str(result[2])
-            r.publish("b2c", msg1)
-            r.publish("b2c", msg2)
-            r.publish("b2c", msg3)
+            # msg1=str(link.match.pk)+str('.teama.d2l,')+str(result[0])
+            # msg2=str(link.match.pk)+str('.teamb.d2l,')+str(result[1])
+            # msg3=str(link.match.pk)+str('.time.d2l,')+str(result[2])
+            # r.publish("b2c", msg1)
+            # r.publish("b2c", msg2)
+            # r.publish("b2c", msg3)
             
 
 
-
-        vpd_links=Links.objects.filter(match__in=active_match,linktype='vpd')
-        for link in vpd_links:
+        def fun_vpd(link):
+        # vpd_links=Links.objects.filter(match__in=active_match,linktype='vpd')
+        # for link in vpd_links:
             result=vpg_parser(link.link)
             link.team1odd=result[0]
             link.team2odd=result[1]
             link.time_left=result[4].encode("utf-8")
             link.save()
 
-            msg1=str(link.match.pk)+str('.teama.vpd,')+str(result[0])
-            msg2=str(link.match.pk)+str('.teamb.vpd,')+str(result[1])
-            msg3=str(link.match.pk)+str('.time.vpd,')+str(result[4])
-            r.publish("b2c", msg1)
-            r.publish("b2c", msg2)
-            r.publish("b2c", msg3)
+            # msg1=str(link.match.pk)+str('.teama.vpd,')+str(result[0])
+            # msg2=str(link.match.pk)+str('.teamb.vpd,')+str(result[1])
+            # msg3=str(link.match.pk)+str('.time.vpd,')+str(result[4])
+            # r.publish("b2c", msg1)
+            # r.publish("b2c", msg2)
+            # r.publish("b2c", msg3)
 
 
-        vpp_links=Links.objects.filter(match__in=active_match,linktype='vpp')
-        for link in vpp_links:
+        # vpp_links=Links.objects.filter(match__in=active_match,linktype='vpp')
+        # for link in vpp_links:
+        def fun_vpp(link):
             result=vpg_parser(link.link)
             link.team1odd=result[2]
             link.team2odd=result[3]
             link.time_left=result[4].encode("utf-8")
             link.save()
-            msg1=str(link.match.pk)+str('.teama.vpp,')+str(result[2])
-            msg2=str(link.match.pk)+str('.teamb.vpp,')+str(result[3])
-            msg3=str(link.match.pk)+str('.time.vpp,')+str(result[4])
-            r.publish("b2c", msg1)
-            r.publish("b2c", msg2)
-            r.publish("b2c", msg3)
+            # msg1=str(link.match.pk)+str('.teama.vpp,')+str(result[2])
+            # msg2=str(link.match.pk)+str('.teamb.vpp,')+str(result[3])
+            # msg3=str(link.match.pk)+str('.time.vpp,')+str(result[4])
+            # r.publish("b2c", msg1)
+            # r.publish("b2c", msg2)
+            # r.publish("b2c", msg3)
 
 
 
-        d2byd_links=Links.objects.filter(match__in=active_match,linktype='d2byd')
-        for link in d2byd_links:
+        # d2byd_links=Links.objects.filter(match__in=active_match,linktype='d2byd')
+        # for link in d2byd_links:
+        def fun_d2byd(link):
             result=d2b_parser(link.link)
             link.team1odd=result[0]
             link.team2odd=result[1]
@@ -253,17 +247,18 @@ class Command(BaseCommand):
                 result[4]='live'
             link.save()
 
-            msg1=str(link.match.pk)+str('.teama.d2byd,')+str(result[0])
-            msg2=str(link.match.pk)+str('.teamb.d2byd,')+str(result[1])
-            msg3=str(link.match.pk)+str('.time.d2byd,')+str(result[4].encode("utf-8"))
-            r.publish("b2c", msg1)
-            r.publish("b2c", msg2)
-            r.publish("b2c", msg3)
+            # msg1=str(link.match.pk)+str('.teama.d2byd,')+str(result[0])
+            # msg2=str(link.match.pk)+str('.teamb.d2byd,')+str(result[1])
+            # msg3=str(link.match.pk)+str('.time.d2byd,')+str(result[4].encode("utf-8"))
+            # r.publish("b2c", msg1)
+            # r.publish("b2c", msg2)
+            # r.publish("b2c", msg3)
 
 
 
-        d2byc_links=Links.objects.filter(match__in=active_match,linktype='d2byc')
-        for link in d2byc_links:
+        # d2byc_links=Links.objects.filter(match__in=active_match,linktype='d2byc')
+        # for link in d2byc_links:
+        def fun_d2byc(link):
             result=d2b_parser(link.link)
             link.team1odd=result[2]
             link.team2odd=result[3]
@@ -274,16 +269,17 @@ class Command(BaseCommand):
                 result[4]='live'
             link.save()
 
-            msg1=str(link.match.pk)+str('.teama.d2byc,')+str(result[2])
-            msg2=str(link.match.pk)+str('.teamb.d2byc,')+str(result[3])
-            msg3=str(link.match.pk)+str('.time.d2byc,')+str(result[4].encode("utf-8"))
+            # msg1=str(link.match.pk)+str('.teama.d2byc,')+str(result[2])
+            # msg2=str(link.match.pk)+str('.teamb.d2byc,')+str(result[3])
+            # msg3=str(link.match.pk)+str('.time.d2byc,')+str(result[4].encode("utf-8"))
 
-            r.publish("b2c", msg1)
-            r.publish("b2c", msg2)
-            r.publish("b2c", msg3)
+            # r.publish("b2c", msg1)
+            # r.publish("b2c", msg2)
+            # r.publish("b2c", msg3)
 
-        d2t_links=Links.objects.filter(match__in=active_match,linktype='d2t')
-        for link in d2t_links:
+        # d2t_links=Links.objects.filter(match__in=active_match,linktype='d2t')
+        # for link in d2t_links:
+        def fun_d2t(link):
             result=d2t_parser(link.link)
             link.team1odd=result[0]
             link.team2odd=result[1]
@@ -303,8 +299,9 @@ class Command(BaseCommand):
             # r.publish("b2c", msg3)
 
 
-        nxt_links=Links.objects.filter(match__in=active_match,linktype='nxt')
-        for link in nxt_links:
+        # nxt_links=Links.objects.filter(match__in=active_match,linktype='nxt')
+        # for link in nxt_links:
+        def fun_nxt(link):
             result=nxt_parser(link.link)
             link.team1odd=result[0]
             link.team2odd=result[1]
@@ -314,3 +311,64 @@ class Command(BaseCommand):
                 link.time_left='live'
                 result[4]='live'
             link.save()
+
+
+        def main_function(link):
+            result=[]
+            try:
+                print "started"
+                # distributor
+
+                if link.linktype == 'nxt':
+                    fun_nxt(link)
+                elif link.linktype == 'd2t':
+                    fun_d2t(link)
+                elif link.linktype == 'd2byc':
+                    fun_d2byc(link)
+                elif link.linktype == 'd2byd':
+                    fun_d2byd(link)
+                elif link.linktype == 'vpp':
+                    fun_vpp(link)
+                elif link.linktype == 'vpd':
+                    fun_vpd(link)
+                elif link.linktype == 'd2l':
+                    fun_d2t(d2l)
+
+
+                result = {
+                    "real_tracking_no": link.link,
+                    "company": link.linktype,
+                    "updated": True,
+                    "error": None
+                }
+
+
+            except Exception,e:
+
+                result = {
+                    "real_tracking_no": link.link,
+                    "company": link.linktype,
+                    "updated": False,
+                    "error": str(e)
+                }
+
+            return result
+
+
+        aftership_track_queue = []
+        # Track Bluedart shipments for businesses and customers
+        aftership_business_shipments = Links.objects.filter(match__in=active_match)
+
+        for aftership_business_shipment in aftership_business_shipments:
+            aftership_track_queue.append(aftership_business_shipment)
+
+
+        if len(aftership_track_queue) > 0:
+            with futures.ThreadPoolExecutor(max_workers=15) as executor:
+                futures_track = (executor.submit(main_function, item) for item in aftership_track_queue)
+                for result in futures.as_completed(futures_track):
+                    if result.exception() is not None:
+                        print('%s' % result.exception())
+                    else:
+                        print(result.result())
+
